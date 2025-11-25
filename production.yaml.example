@@ -1,0 +1,34 @@
+# Production Guard Configuration
+# Copy this file to ~/.claude/hooks/production.yaml and customize for your machine
+
+# Production ports to protect (block port binding)
+ports:
+  - 80
+  - 443
+  - 3000
+  # Add your production ports here
+
+# Production Docker containers (block stop/restart/rm)
+containers:
+  - my-prod-app
+  - my-prod-db
+  # Add your production container names here
+
+# Production directories (block file writes)
+directories:
+  - $HOME/production-app
+  - /etc/nginx
+  # Add your production directories here
+
+# Safe directories (always allowed, takes precedence)
+safe_directories:
+  - $HOME/dev
+  - $HOME/projects
+  # Add your development directories here
+
+# Keywords for smart pkill detection
+process_keywords:
+  - myapp
+  - nginx
+  - postgres
+  # Add keywords that identify your production processes
