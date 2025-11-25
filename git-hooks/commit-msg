@@ -1,0 +1,28 @@
+#!/bin/bash
+# Git hook to reject commits with Claude attribution
+
+commit_msg_file="$1"
+commit_msg=$(cat "$commit_msg_file")
+
+# Check for any variation of "claude code" (case-insensitive)
+if echo "$commit_msg" | grep -qi "claude code"; then
+    echo "❌ COMMIT REJECTED: Contains 'claude code'"
+    echo "   Please remove any Claude Code references from your commit message."
+    exit 1
+fi
+
+# Check for Claude as co-author
+if echo "$commit_msg" | grep -qi "Co-Authored-By.*Claude"; then
+    echo "❌ COMMIT REJECTED: Contains Claude as co-author"
+    echo "   Please remove Claude from Co-Authored-By."
+    exit 1
+fi
+
+# Check for Anthropic email
+if echo "$commit_msg" | grep -qi "noreply@anthropic.com"; then
+    echo "❌ COMMIT REJECTED: Contains Anthropic email"
+    echo "   Please remove any Anthropic references."
+    exit 1
+fi
+
+exit 0

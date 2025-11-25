@@ -1,15 +1,21 @@
 # Claude Production Guard
 
-A Claude Code hook that prevents accidental modification of production services.
+Hooks for Claude Code that prevent common mistakes.
 
 ## Features
 
+### Production Guard (Claude Code Hook)
 - **Docker Protection**: Blocks `docker stop/restart/rm/kill` on production containers
 - **File Protection**: Blocks writes to production directories
 - **Port Protection**: Blocks binding to production ports
 - **Smart pkill Detection**: Blocks `pkill/killall` that could affect production
 - **Dev Override**: Containers with `-dev` suffix are always allowed
 - **Easy Override**: Bypass protection with `CLAUDE_PROD_OVERRIDE=true`
+
+### Git Commit Hook
+- Rejects commits containing "Claude Code" references
+- Rejects commits with Claude as co-author
+- Rejects commits with Anthropic email addresses
 
 ## Installation
 

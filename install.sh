@@ -6,6 +6,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 HOOKS_DIR="$HOME/.claude/hooks"
 SETTINGS_FILE="$HOME/.claude/settings.json"
+GIT_HOOKS_DIR="$HOME/.git-hooks"
 
 echo "=== Claude Production Guard Installer ==="
 echo ""
@@ -114,6 +115,23 @@ update_settings() {
     fi
 }
 
+# Install git commit-msg hook
+install_git_hook() {
+    echo ""
+    read -p "Install git hook to reject Claude attribution in commits? (Y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Nn]$ ]]; then
+        return
+    fi
+
+    echo "Installing git commit-msg hook..."
+    mkdir -p "$GIT_HOOKS_DIR"
+    cp "$SCRIPT_DIR/git-hooks/commit-msg" "$GIT_HOOKS_DIR/"
+    chmod +x "$GIT_HOOKS_DIR/commit-msg"
+    git config --global core.hooksPath "$GIT_HOOKS_DIR"
+    echo "Git hook installed: $GIT_HOOKS_DIR/commit-msg"
+}
+
 # Main
 main() {
     check_deps
@@ -121,6 +139,7 @@ main() {
     install_script
     setup_config
     update_settings
+    install_git_hook
 
     echo ""
     echo "=== Installation Complete ==="
